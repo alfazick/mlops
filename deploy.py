@@ -1,6 +1,7 @@
 from azureml.core import Workspace, Environment, Model
 from azureml.core.model import InferenceConfig
 from azureml.core.webservice import AciWebservice
+from azureml.core.conda_dependencies import CondaDependencies
 
 # Connect to the workspace
 ws = Workspace.from_config(path="config.json")
@@ -10,10 +11,21 @@ model = Model(ws, 'naruto_classifier_v2')
 
 # Create environment
 env = Environment('naruto-env')
-python_packages = ['numpy', 'tensorflow', 'jsonpickle==1.5.2']
-for package in python_packages:
-    env.python.conda_dependencies.add_pip_package(package)
 
+# Create a CondaDependencies object and add required packages
+conda_dep = CondaDependencies()
+conda_dep.add_pip_package("azureml-defaults")  # Azure ML dependencies
+#conda_dep.add_conda_package("python=3.9")  # Example: Add specific Python version
+
+# Read packages from requirements.txt and add them as pip packages
+with open("requirements.txt", "r") as req_file:
+    for line in req_file.readlines():
+        conda_dep.add_pip_package(line.strip())  # Assuming each line contains a package specifier
+
+# Assign the CondaDependencies object to the environment
+env.python.conda_dependencies = conda_dep
+
+print("All dependencies fixed")
 # Inference config
 inf_config = InferenceConfig(entry_script="score.py", environment=env)
 
@@ -29,4 +41,4 @@ service = Model.deploy(workspace=ws,
 
 service.wait_for_deployment(show_output=True)
 
-print(f"Service {service_name} deployed: {service.scoring_uri}")
+print(f"Service {service.name} deployed: {service.scoring_uri}")
