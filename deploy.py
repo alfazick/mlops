@@ -10,11 +10,11 @@ ws = Workspace.from_config(path="config.json")
 model = Model(ws, 'naruto_classifier_v2')
 
 # Create environment
-env = Environment('naruto-env')
+#env = Environment('naruto-env')
 
 # Create a CondaDependencies object and add required packages
-conda_dep = CondaDependencies()
-conda_dep.add_pip_package("azureml-defaults")  # Azure ML dependencies
+#conda_dep = CondaDependencies()
+#conda_dep.add_pip_package("azureml-defaults")  # Azure ML dependencies
 #conda_dep.add_conda_package("python=3.9")  # Example: Add specific Python version
 
 # Read packages from requirements.txt and add them as pip packages
@@ -23,7 +23,7 @@ with open("requirements.txt", "r") as req_file:
         conda_dep.add_pip_package(line.strip())  # Assuming each line contains a package specifier
 
 # Assign the CondaDependencies object to the environment
-env.python.conda_dependencies = conda_dep
+#env.python.conda_dependencies = conda_dep
 
 print("All dependencies fixed")
 # Inference config
