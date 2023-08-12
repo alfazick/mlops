@@ -192,4 +192,5 @@ dependencies:
       - tqdm==4.66.1
       - typing-extensions==4.7.1
       - websocket-client==1.6.1
+      - azureml-inference-server-http
 prefix: /anaconda/envs/your_env_name
